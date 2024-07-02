@@ -1,0 +1,79 @@
+<mvc:View controllerName="zhrfiocico.controller.MainView"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt">
+    <Bar busy="false" busyIndicatorDelay="1000" visible="true" fieldGroupIds="[]" enableFlexBox="false" translucent="false" design="Auto" validationSuccess="" validationError="" parseError="" formatError="" validateFieldGroup="">
+        <contentLeft>
+            <Button busy="false" busyIndicatorDelay="1000" visible="true" fieldGroupIds="[]" text="" type="Default" width="" enabled="true" icon="sap-icon://nav-back" iconFirst="true" activeIcon="" iconDensityAware="true" textDirection="Inherit" validationSuccess="" validationError="" parseError="" formatError="" validateFieldGroup="" tap="" press="onNavBack"></Button>
+        </contentLeft>
+        <contentMiddle>
+            <Text busy="false" busyIndicatorDelay="1000" visible="true" fieldGroupIds="[]" text="Zeitbuchung" textDirection="Inherit" wrapping="true" textAlign="Begin" validationSuccess="" validationError="" parseError="" formatError="" validateFieldGroup=""></Text>
+        </contentMiddle>
+    </Bar>
+    <Panel xmlns="sap.m" visible="true" headerText="" width="100%" height="auto">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Label xmlns="sap.m" design="Standard" text="Datum:" visible="true" textAlign="Begin" textDirection="Inherit" width="" required="false" labelFor="datumId"></Label>
+                <DatePicker id="datumId" value="{ path: 'data>/CurDate' }" editable="false"/>
+            </VBox>
+            <VBox class="sapUiSmallMargin">
+                <Label xmlns="sap.m" design="Standard" text="Uhrzeit:" visible="true" textAlign="Begin" textDirection="Inherit" width="" required="false" labelFor="uhrId"></Label>
+                <DatePicker id="uhrId" value="{ path: 'data>/CurTime' }" editable="false"/>
+            </VBox>
+        </content>
+    </Panel>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Arbeitzeit Beginn" press="onClockIn" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://time-entry-request"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Arbeitzeit Ende" press="onClockOut" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://customer-history"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Pause Beginn" press="onPauseBeginn" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://future"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Pause Ende" press="onPauseEnde" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://history"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Dienstgang Beginn" press="onTripBeginn" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://fob-watch"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Dienstgang Ende" press="onTripEnde" state="{status>/state}">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <ImageContent src="sap-icon://past"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+</mvc:View>
