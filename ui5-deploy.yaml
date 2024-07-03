@@ -13,8 +13,9 @@ builder:
     - name: deploy-to-abap
       afterTask: generateCachebusterInfo
       configuration:
+        log: 5
         target:
-          url: https://SAPDEV1.PORTA.DE:8201/sap/opu/odata/sap/ZHR_XSS_CICO_SRV
+          url: https://SAPDEV1.PORTA.DE:8201
           client: "100"
         app:
           name: ZHR_FIO_CICO
