@@ -6,7 +6,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
       this.oModel = this.getOwnerComponent().getModel();
       this.oJsonModel = this.getOwnerComponent().getModel("data");
       var time = this.getCurrentDate();
-      this.oJsonModel.setProperty("/time", time);
     },
     onNavBack: function () {
       window.history.go(-1);
@@ -19,8 +18,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onClockIn: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Arbeitszeit Beginn erfolgreich gebucht. Kommen-Zeit: " + time;
+      var sMessage = "Arbeitszeit Beginn erfolgreich gebucht. Kommen-Zeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("CLOCK_IN");
       this.machPassivButtons(this.err);
@@ -28,8 +26,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onClockOut: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Arbeitszeit Ende erfolgreich gebucht. Gehen-Zeit: " + time;
+      var sMessage = "Arbeitszeit Ende erfolgreich gebucht. Gehen-Zeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("CLOCK_OUT");
       this.machPassivButtons(this.err);
@@ -37,8 +34,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onPauseBeginn: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Pause Beginn erfolgreich gebucht. Beginnzeit: " + time;
+      var sMessage = "Pause Beginn erfolgreich gebucht. Beginnzeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("PAUSE_START");
       this.machPassivButtons(this.err);
@@ -46,8 +42,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onPauseEnde: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Pause Ende erfolgreich gebucht. Endezeit: " + time;
+      var sMessage = "Pause Ende erfolgreich gebucht. Endezeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("PAUSE_END");
       this.machPassivButtons(this.err);
@@ -55,8 +50,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onTripBeginn: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Dienstgang Beginn erfolgreich gebucht. Beginnzeit: " + time;
+      var sMessage = "Dienstgang Beginn erfolgreich gebucht. Beginnzeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("TRIP_START");
       this.machPassivButtons(this.err);
@@ -64,8 +58,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     onTripEnde: function () {
       this.onBusy();
-      var time = this.oJsonModel.getProperty("/time");
-      var sMessage = "Dienstgang Ende erfolgreich gebucht. Endezeit: " + time;
+      var sMessage = "Dienstgang Ende erfolgreich gebucht. Endezeit: ";
       this.oJsonModel.setProperty("/sMessage", sMessage);
       this.updateService("TRIP_END");
       this.machPassivButtons(this.err);
@@ -73,30 +66,35 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
     updateService: function (bName) {
       var that = this;
-      var oEntry = {
-        Aksionname: bName,
-        Messagetyp: "",
-        Message: "",
-      };
-      this.oModel.update("/Aktion" + "('" + bName + "')", oEntry, {
-        success: function () {
+      this.oModel.read("/Aktion" + "('" + bName + "')", {
+        success: $.proxy(function (data, resp) {
           that.machPassivButtons(true);
-          var sMessage = that.oJsonModel.getProperty("/sMessage");
-          //   sap.m.MessageBox.success(sMessage, sap.m.MessageBox.Icon.SUCCESS);
+          var ms = resp.data.Time.ms;
+          var timeString = that.convertMSToTimeString(ms);
+          var sMessage = that.oJsonModel.getProperty("/sMessage") + timeString;
+          this.oJsonModel.setProperty("/CurTime", timeString);
           sap.m.MessageBox.show(sMessage, {
             icon: sap.m.MessageBox.Icon.SUCCESS,
             title: "Success",
           });
-        },
-        error: function (error) {
+        }, this),
+        error: $.proxy(function (oError) {
           that.machPassivButtons(false);
           var errorObj1 = JSON.parse(error.responseText);
           sap.m.MessageBox.show(errorObj1.error.message.value, {
             icon: sap.m.MessageBox.Icon.ERROR,
             title: "Error",
           });
-        },
+        }, this),
       });
+    },
+    convertMSToTimeString: function (ms) {
+      let date = new Date(ms);
+      let hours = String(date.getUTCHours()).padStart(2, "0");
+      let minutes = String(date.getUTCMinutes()).padStart(2, "0");
+      let seconds = String(date.getUTCSeconds()).padStart(2, "0");
+
+      return `${hours}:${minutes}:${seconds}`;
     },
     machPassivButtons: function (bError) {
       if (!bError) {

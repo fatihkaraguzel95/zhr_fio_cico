@@ -21,6 +21,6 @@ builder:
           name: ZHR_FIO_CICO
           description: Schnellbuchung Kommen/Gehen
           package: ZHR_XSS_FIORI
-          transport: DHRK914851
+          transport: DHRK914903
         exclude:
           - /test/
